@@ -1,0 +1,9 @@
+{
+  "id":"vserverinfo",
+  "name":"VServerInfo",
+  "version":"${project.version}",
+  "description":"Get Info about your servers",
+  "authors":["4drian3d"],
+  "dependencies":[],
+  "main":"me.dreamerzero.vserverinfo.ServerInfo"
+}
