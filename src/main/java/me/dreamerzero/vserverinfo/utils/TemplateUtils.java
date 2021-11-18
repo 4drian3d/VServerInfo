@@ -88,5 +88,9 @@ public class TemplateUtils {
         return infocomponent.build();
     }
 
+    public static Component getNotFoundComponent(){
+        return regularmm.deserialize(Config.getConfig().getNotAvailableFormat());
+    }
+
     private TemplateUtils(){}
 }

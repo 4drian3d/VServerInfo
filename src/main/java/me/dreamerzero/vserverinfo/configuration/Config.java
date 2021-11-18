@@ -51,7 +51,7 @@ public class Config {
 
         @Comment("Here you can set the format of the main plugin command")
         private List<String> info_format = List.of(
-            "<green>Server Info:</green>",
+            "<gradient:#bdc3c7:#2c3e50>Server Info:</gradient>",
             "<aqua>Online Servers:</aqua> ",
             "<onlineservers>",
             "<red>Offline Servers:</red> ",
@@ -60,17 +60,20 @@ public class Config {
 
         @Comment("Set the hover with the information to be displayed for each online server")
         private List<String> hover_available_format = List.of(
-            "<aqua>Players Count: <white><count>",
-            "<aqua>Max Players: <white><maxcount>",
-            "<aqua>Motd:",
+            "<gradient:#be93c5:#7bc6cc>Players Count:</gradient> <white><count>",
+            "<gradient:#be93c5:#7bc6cc>Max Players:</gradient> <white><maxcount>",
+            "<gradient:#be93c5:#7bc6cc>Motd:</gradient>",
             "<motd>"
         );
 
         @Comment("Sets the text formatting of each online server")
-        private String server_available_format = "<green><server></green>";
+        private String server_available_format = "<gradient:#4ecdc4:#55670><server></gradient>";
 
         @Comment("Sets the text formatting of each offline server")
-        private String server_not_available_format = "<red><server></red>";
+        private String server_not_available_format = "<gradient:#ee0979:#ff6a00><server></gradient>";
+
+        @Comment("Message to send if no server was found in a category")
+        private String servers_not_found = "<gradient:#DBE6F6:#C5796D>No server found in this category</gradient>";
 
         public String getAvailableFormat(){
             return this.server_available_format;
@@ -86,6 +89,10 @@ public class Config {
 
         public List<String> getinfoFormat(){
             return this.info_format;
+        }
+
+        public String getNotFoundFormat(){
+            return this.servers_not_found;
         }
     }
 

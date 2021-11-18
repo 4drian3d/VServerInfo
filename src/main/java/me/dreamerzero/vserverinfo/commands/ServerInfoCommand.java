@@ -37,20 +37,28 @@ public class ServerInfoCommand {
                         }
                     })).filter(ping -> ping.join() != null)
                     .toArray(CompletableFuture[]::new)).thenAccept(a->{
-                        var onlineserverscomponent = Component.text();
 
-                        onlineservers.entrySet().forEach(entry  ->
-                            onlineserverscomponent.append(
-                                TemplateUtils.getServerComponent(
-                                    entry.getKey(),
-                                    entry.getValue())
-                        ));
+                        var onlineserverscomponent = Component.text();
+                        if(onlineservers.isEmpty()){
+                            onlineserverscomponent.append(TemplateUtils.getNotFoundComponent());
+                        } else {
+                            onlineservers.entrySet().forEach(entry  ->
+                                onlineserverscomponent.append(
+                                    TemplateUtils.getServerComponent(
+                                        entry.getKey(),
+                                        entry.getValue())
+                            ));
+                        }
 
                         var offlineserverscomponent = Component.text();
-                        offlineservers.forEach(offlineserver  ->
-                            offlineserverscomponent.append(
-                                TemplateUtils.getOfflineServerComponent(offlineserver))
-                        );
+                        if(offlineservers.isEmpty()){
+                            offlineserverscomponent.append(TemplateUtils.getNotFoundComponent());
+                        } else {
+                            offlineservers.forEach(offlineserver  ->
+                                offlineserverscomponent.append(
+                                    TemplateUtils.getOfflineServerComponent(offlineserver))
+                            );
+                        }
 
                         context.getSource().sendMessage(
                             TemplateUtils.getInfoComponent(
