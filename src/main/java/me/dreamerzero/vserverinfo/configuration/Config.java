@@ -30,7 +30,8 @@ public class Config {
                 Official Guide: https://docs.adventure.kyori.net/minimessage#format
                 Spanish Guide: https://gist.github.com/4drian3d/9ccce0ca1774285e38becb09b73728f3
 
-                Check the placeholders available for each message at: 
+                Check the placeholders available for each message at:
+                https://github.com/4drian3d/VServerInfo/wiki/Placeholders
                 """)
             )
             .file(configFile)

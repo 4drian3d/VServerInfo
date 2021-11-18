@@ -34,9 +34,8 @@ public class TemplateUtils {
         return TemplateResolver.templates(
             Template.template("server", serverinfo.getName()),
             Template.template("motd", ping.getDescriptionComponent()),
-            Template.template("count", String.valueOf(pingbuilder.getOnlinePlayers())),
+            Template.template("count", String.valueOf(server.getPlayersConnected().size())),
             Template.template("maxcount", String.valueOf(pingbuilder.getMaximumPlayers())),
-            Template.template("name", serverinfo.getName()),
             Template.template("ip", String.valueOf(serverinfo.getAddress().getAddress().getHostAddress()))
         );
     }
@@ -45,7 +44,6 @@ public class TemplateUtils {
         var serverinfo = server.getServerInfo();
         return TemplateResolver.templates(
             Template.template("server", serverinfo.getName()),
-            Template.template("name", serverinfo.getName()),
             Template.template("count", String.valueOf(server.getPlayersConnected().size())),
             Template.template("ip", String.valueOf(serverinfo.getAddress().getAddress().getHostAddress()))
         );
