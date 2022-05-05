@@ -38,7 +38,7 @@ public class ServerInfoCommand {
                         return sendAllInfo(plugin, cmd.getSource());
                     }
                     plugin.proxy().getServer(server).ifPresentOrElse(sv -> {
-                        sv.ping().whenCompleteAsync((ping, exception) -> {
+                        sv.ping().handleAsync((ping, exception) -> {
                             if(exception != null) {
                                 cmd.getSource().sendMessage(
                                     Placeholders.getOfflineServerComponent(plugin.config(), sv)
@@ -52,6 +52,7 @@ public class ServerInfoCommand {
                                     )
                                 );
                             }
+                            return null;
                         });
                     }, () -> {
                         cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize(plugin.config().getNotExistsFormat()));
