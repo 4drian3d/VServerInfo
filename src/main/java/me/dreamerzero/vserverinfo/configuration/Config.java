@@ -1,6 +1,5 @@
 package me.dreamerzero.vserverinfo.configuration;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -13,13 +12,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 public class Config {
-    private static Configuration configuration;
-    public static Configuration getConfig(){
-        return configuration;
-    }
 
-    public static void loadConfig(@NotNull Path path, @NotNull Logger logger){
-        File configFile = new File(path.toFile(), "config.conf");
+    public static Configuration loadConfig(@NotNull Path path, @NotNull Logger logger){
+        final Path configFile = path.resolve("config.conf");
         final HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
             .defaultOptions(opts -> opts
                 .shouldCopyDefaults(true)
@@ -34,16 +29,20 @@ public class Config {
                 https://github.com/4drian3d/VServerInfo/wiki/Placeholders
                 """)
             )
-            .file(configFile)
+            .path(configFile)
             .build();
+
+        Configuration configuration;
 
         try {
             final CommentedConfigurationNode node = loader.load();
             configuration = node.get(Configuration.class);
             node.set(Configuration.class, configuration);
             loader.save(node);
+            return configuration;
         } catch (ConfigurateException exception){
-            logger.error("Could not load configuration: {}", exception.getMessage());
+            logger.error("Could not load configuration: ", exception);
+            return null;
         }
     }
 
@@ -74,7 +73,7 @@ public class Config {
         private String server_not_available_format = "<gradient:#ee0979:#ff6a00><server></gradient>";
 
         @Comment("Message to send if no server was found in a category")
-        private String servers_not_found = "<gradient:#DBE6F6:#C5796D>No server found in this category</gradient>";
+        private String serverNotExists = "<gradient:#DBE6F6:#C5796D>This server does not exists</gradient>";
 
         public String getAvailableFormat(){
             return this.server_available_format;
@@ -92,8 +91,8 @@ public class Config {
             return this.info_format;
         }
 
-        public String getNotFoundFormat(){
-            return this.servers_not_found;
+        public String getNotExistsFormat(){
+            return this.serverNotExists;
         }
     }
 

@@ -17,6 +17,7 @@ public class ServerInfo {
     private final ProxyServer proxy;
     private final Logger logger;
     private final Path path;
+    private Config.Configuration configuration;
 
     @Inject
     public ServerInfo(ProxyServer proxy, Logger logger, @DataDirectory Path path) {
@@ -27,9 +28,20 @@ public class ServerInfo {
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        Config.loadConfig(path, logger);
-        ServerInfoCommand.brigadierServerInfo(proxy);
+        this.configuration = Config.loadConfig(path, logger);
+        if(configuration == null) {
+            return;
+        }
+        ServerInfoCommand.command(this);
         logger.info("ServerInfo correctly started");
+    }
+
+    public Config.Configuration config() {
+        return this.configuration;
+    }
+
+    public ProxyServer proxy() {
+        return this.proxy;
     }
 
 }
