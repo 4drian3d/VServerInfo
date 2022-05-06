@@ -47,14 +47,14 @@ public class Placeholders {
     }
 
     public static Component getInfoComponent(Config.Configuration config, @NotNull Component online, @NotNull Component offline){
-        final TagResolver templates = TagResolver.resolver(
+        final TagResolver resolver = TagResolver.resolver(
             Placeholder.component("onlineservers", online),
             Placeholder.component("offlineservers", offline)
         );
 
         return config.getinfoFormat()
             .stream()
-            .map(st -> MiniMessage.miniMessage().deserialize(st, templates))
+            .map(st -> MiniMessage.miniMessage().deserialize(st, resolver))
             .collect(COLLECTOR);
     }
 

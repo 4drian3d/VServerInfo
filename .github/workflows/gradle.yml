@@ -1,4 +1,4 @@
-name: Maven Build
+name: Gradke Build
 
 on: [push, pull_request]
 
@@ -15,11 +15,11 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
-        cache: 'maven'
+        cache: 'gradle'
 
     - name: Build with Maven
       uses: nick-invision/retry@v2
       with:
         timeout_minutes: 5
         max_attempts: 2
-        command: mvn -B package --file pom.xml
+        command: gradle build

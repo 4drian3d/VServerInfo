@@ -40,3 +40,8 @@ buildNumber.properties
 .factorypath
 .project
 .vscode/ 
+
+.gradle/
+/.idea/
+build/
+bin/
