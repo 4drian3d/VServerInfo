@@ -1,13 +1,13 @@
-package me.dreamerzero.vserverinfo.utils;
+package me.adrianed.vserverinfo.utils;
 
 import java.util.stream.Collector;
 
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 
+import me.adrianed.vserverinfo.configuration.Configuration;
 import org.jetbrains.annotations.NotNull;
 
-import me.dreamerzero.vserverinfo.configuration.Config;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -17,7 +17,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 public class Placeholders {
     private static final Collector<Component, ?, Component> COLLECTOR = Component.toComponent(Component.newline());
 
-    public static Component getServerComponent(Config.Configuration config, final RegisteredServer server, final ServerPing ping){
+    public static Component getServerComponent(Configuration.OnlineFormat config, final RegisteredServer server, final ServerPing ping){
         final TagResolver resolver = TagResolver.resolver(
             Placeholder.unparsed("server", server.getServerInfo().getName()),
             Placeholder.component("motd", ping.getDescriptionComponent()),
@@ -27,9 +27,9 @@ public class Placeholders {
         );
 
         return MiniMessage.miniMessage()
-            .deserialize(config.getAvailableFormat(), resolver)
+            .deserialize(config.getFormat(), resolver)
             .hoverEvent(
-                HoverEvent.showText(config.getAvailableHover()
+                HoverEvent.showText(config.getHover()
                     .stream()
                     .map(st -> MiniMessage.miniMessage().deserialize(st, resolver))
                     .collect(COLLECTOR)
@@ -37,22 +37,28 @@ public class Placeholders {
             .append(Component.space());
     }
 
-    public static Component getOfflineServerComponent(Config.Configuration config, final RegisteredServer server){
+    public static Component getOfflineServerComponent(Configuration.OfflineFormat config, final RegisteredServer server){
         return MiniMessage.miniMessage()
-            .deserialize(config.getNotAvailableFormat(),
+            .deserialize(config.getFormat(),
                 Placeholder.unparsed("server", server.getServerInfo().getName()),
                 Placeholder.unparsed("count", String.valueOf(server.getPlayersConnected().size())),
                 Placeholder.unparsed("ip", String.valueOf(server.getServerInfo().getAddress().getAddress().getHostAddress()))
-            ).append(Component.space());
+            ).append(Component.space())
+                .hoverEvent(HoverEvent.showText(
+                        config.getHover()
+                                .stream()
+                                .map(MiniMessage.miniMessage()::deserialize)
+                                .collect(COLLECTOR)
+                ));
     }
 
-    public static Component getInfoComponent(Config.Configuration config, @NotNull Component online, @NotNull Component offline){
+    public static Component getInfoComponent(Configuration config, @NotNull Component online, @NotNull Component offline){
         final TagResolver resolver = TagResolver.resolver(
             Placeholder.component("onlineservers", online),
             Placeholder.component("offlineservers", offline)
         );
 
-        return config.getinfoFormat()
+        return config.getAll().getFormat()
             .stream()
             .map(st -> MiniMessage.miniMessage().deserialize(st, resolver))
             .collect(COLLECTOR);

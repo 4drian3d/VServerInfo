@@ -45,3 +45,6 @@ buildNumber.properties
 /.idea/
 build/
 bin/
+
+# Run Velocity Files
+/run

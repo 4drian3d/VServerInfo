@@ -1,9 +1,9 @@
-# VServerInfo [![WorkFlow Status](https://img.shields.io/github/workflow/status/4drian3d/VServerInfo/Maven%20Build?&style=flat-square)](https://github.com/4drian3d/VServerInfo/actions/workflows/maven.yml)
+# VServerInfo [![WorkFlow Status](https://img.shields.io/github/actions/workflow/status/4drian3d/VServerInfo/gradle.yml?style=flat-square)](https://github.com/4drian3d/VServerInfo/actions/workflows/maven.yml)
 Get the information of each server in your Velocity network
 
 ## Requirements
-- Velocity 3.0.1+
-- Java 16+
+- Velocity 3.1.2+
+- Java 17+
 
 ## Commands
 

@@ -1,4 +1,4 @@
-package me.dreamerzero.vserverinfo;
+package me.adrianed.vserverinfo;
 
 import java.nio.file.Path;
 
@@ -9,11 +9,13 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import me.adrianed.vserverinfo.configuration.Configuration;
+import me.adrianed.vserverinfo.configuration.Loader;
+import me.adrianed.vserverinfo.utils.Libraries;
 import org.slf4j.Logger;
 
-import me.dreamerzero.vserverinfo.commands.ServerInfoCommand;
-import me.dreamerzero.vserverinfo.configuration.Config;
-import me.dreamerzero.vserverinfo.utils.Constants;
+import me.adrianed.vserverinfo.commands.ServerInfoCommand;
+import me.adrianed.vserverinfo.utils.Constants;
 
 @Plugin(
     id = "vserverinfo",
@@ -22,11 +24,11 @@ import me.dreamerzero.vserverinfo.utils.Constants;
     description = "Get Info about your servers",
     authors = ("4drian3d")
 )
-public class ServerInfo {
+public final class ServerInfo {
     private final ProxyServer proxy;
     private final Logger logger;
     private final Path path;
-    private Config.Configuration configuration;
+    private Configuration configuration;
 
     @Inject
     public ServerInfo(ProxyServer proxy, Logger logger, @DataDirectory Path path) {
@@ -37,15 +39,16 @@ public class ServerInfo {
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        this.configuration = Config.loadConfig(path, logger);
-        if (configuration == null) {
+        Libraries.load(this, logger, path, proxy().getPluginManager());
+        this.configuration = Loader.loadConfig(path, logger);
+        if (this.configuration == null) {
             return;
         }
         ServerInfoCommand.command(this);
         logger.info("ServerInfo correctly started");
     }
 
-    public Config.Configuration config() {
+    public Configuration config() {
         return this.configuration;
     }
 

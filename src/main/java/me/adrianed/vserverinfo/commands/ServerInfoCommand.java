@@ -1,8 +1,9 @@
-package me.dreamerzero.vserverinfo.commands;
+package me.adrianed.vserverinfo.commands;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -15,8 +16,8 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 
-import me.dreamerzero.vserverinfo.ServerInfo;
-import me.dreamerzero.vserverinfo.utils.Placeholders;
+import me.adrianed.vserverinfo.ServerInfo;
+import me.adrianed.vserverinfo.utils.Placeholders;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -33,40 +34,30 @@ public class ServerInfoCommand {
                     return builder.buildFuture();
                 })
                 .executes(cmd -> {
-                    final String server = cmd.getArgument("server", String.class);
+                    final String server = StringArgumentType.getString(cmd, "server");
                     if (server.equals("ALL")) {
                         return sendAllInfo(plugin, cmd.getSource());
                     }
-                    plugin.proxy().getServer(server).ifPresentOrElse(sv -> {
-                        sv.ping().handleAsync((ping, exception) -> {
-                            if(exception != null) {
-                                cmd.getSource().sendMessage(
-                                    Placeholders.getOfflineServerComponent(plugin.config(), sv)
-                                );
-                            } else {
-                                cmd.getSource().sendMessage(
-                                    Placeholders.getServerComponent(
-                                        plugin.config(),
-                                        sv,
-                                        ping
-                                    )
-                                );
-                            }
-                            return null;
-                        });
-                    }, () -> {
-                        cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize(plugin.config().getNotExistsFormat()));
-                    });
+                    plugin.proxy().getServer(server).ifPresentOrElse(sv ->
+                            sv.ping().handleAsync((ping, exception) -> exception != null
+                                ? Placeholders.getOfflineServerComponent(plugin.config().getSingle().getOffline(), sv)
+                                : Placeholders.getServerComponent(plugin.config().getSingle().getOnline(), sv, ping))
+                            .thenAcceptAsync(cmd.getSource()::sendMessage),
+                            () -> cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize(plugin.config().getServerNotFound())));
                     return Command.SINGLE_SUCCESS;
                 })
             ).build();
 
             final CommandManager manager = plugin.proxy().getCommandManager();
-            manager.register(manager.metaBuilder("serverinfo")
-                .aliases("vserverinfo")
-                .build(), new BrigadierCommand(infoCommand));
+            final var command = new BrigadierCommand(infoCommand);
+            final var meta = manager.metaBuilder(command)
+                    .aliases("vserverinfo")
+                    .plugin(plugin)
+                    .build();
+            manager.register(meta, command);
     }
 
+    @SuppressWarnings("SameReturnValue")
     private static int sendAllInfo(final ServerInfo plugin, CommandSource source) {
         final var registeredServers = plugin.proxy().getAllServers();
         final Map<RegisteredServer, ServerPing> servers = new HashMap<>(registeredServers.size());
@@ -76,17 +67,31 @@ public class ServerInfoCommand {
             .thenRunAsync(() -> {
                 final TextComponent.Builder onlineServers = Component.text();
                 final TextComponent.Builder offlineServers = Component.text();
+                final AtomicBoolean hasOffline = new AtomicBoolean(false);
+                final AtomicBoolean hasOnline = new AtomicBoolean(false);
                 servers.forEach((server, ping) -> {
                     if (ping == null) {
+                        hasOffline.set(true);
                         offlineServers.append(
-                            Placeholders.getOfflineServerComponent(plugin.config(), server)
+                            Placeholders.getOfflineServerComponent(plugin.config().getAll().getOffline(), server)
                         );
                     } else {
+                        hasOnline.set(true);
                         onlineServers.append(
-                            Placeholders.getServerComponent(plugin.config(), server, ping)
+                            Placeholders.getServerComponent(plugin.config().getAll().getOnline(), server, ping)
                         );
                     }
                 });
+                if (!hasOnline.get()) {
+                    onlineServers.append(
+                            MiniMessage.miniMessage().deserialize(
+                                    plugin.config().getAll().getOnline().getNoneFound()));
+                }
+                if (!hasOffline.get()) {
+                    offlineServers.append(
+                            MiniMessage.miniMessage().deserialize(
+                                    plugin.config().getAll().getOffline().getNoneFound()));
+                }
                 source.sendMessage(
                     Placeholders.getInfoComponent(
                         plugin.config(),
@@ -97,5 +102,6 @@ public class ServerInfoCommand {
             return Command.SINGLE_SUCCESS;
     }
 
-    private ServerInfoCommand(){}
+    private ServerInfoCommand() {
+    }
 }
