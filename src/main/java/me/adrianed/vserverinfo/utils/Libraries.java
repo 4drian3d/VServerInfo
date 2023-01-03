@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
-public class Libraries {
+public final class Libraries {
     public static void load(ServerInfo plugin, Logger logger, Path path, PluginManager manager) {
         final VelocityLibraryManager<ServerInfo> libraryManager
                 = new VelocityLibraryManager<>(logger, path, manager, plugin, "libs");
@@ -40,6 +40,7 @@ public class Libraries {
                 .id("geantyref")
                 .relocate(geantyrefRelocation)
                 .build();
+
         libraryManager.addMavenCentral();
         libraryManager.loadLibrary(geantyref);
         libraryManager.loadLibrary(confCore);

@@ -14,7 +14,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-public class Placeholders {
+public final class Placeholders {
     private static final Collector<Component, ?, Component> COLLECTOR = Component.toComponent(Component.newline());
 
     public static Component getServerComponent(Configuration.OnlineFormat config, final RegisteredServer server, final ServerPing ping){
@@ -37,7 +37,7 @@ public class Placeholders {
             .append(Component.space());
     }
 
-    public static Component getOfflineServerComponent(Configuration.OfflineFormat config, final RegisteredServer server){
+    public static Component getOfflineServerComponent(Configuration.OfflineFormat config, final RegisteredServer server) {
         return MiniMessage.miniMessage()
             .deserialize(config.getFormat(),
                 Placeholder.unparsed("server", server.getServerInfo().getName()),
@@ -52,7 +52,7 @@ public class Placeholders {
                 ));
     }
 
-    public static Component getInfoComponent(Configuration config, @NotNull Component online, @NotNull Component offline){
+    public static Component getInfoComponent(final Configuration config, @NotNull Component online, @NotNull Component offline){
         final TagResolver resolver = TagResolver.resolver(
             Placeholder.component("onlineservers", online),
             Placeholder.component("offlineservers", offline)
@@ -64,5 +64,5 @@ public class Placeholders {
             .collect(COLLECTOR);
     }
 
-    private Placeholders(){}
+    private Placeholders() {}
 }

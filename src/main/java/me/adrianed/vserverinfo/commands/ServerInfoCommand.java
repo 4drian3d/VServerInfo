@@ -22,7 +22,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-public class ServerInfoCommand {
+public final class ServerInfoCommand {
     public static void command(final ServerInfo plugin){
         final LiteralCommandNode<CommandSource> infoCommand = LiteralArgumentBuilder
             .<CommandSource>literal("serverinfo")
@@ -35,15 +35,16 @@ public class ServerInfoCommand {
                 })
                 .executes(cmd -> {
                     final String server = StringArgumentType.getString(cmd, "server");
+                    final var source = cmd.getSource();
                     if (server.equals("ALL")) {
-                        return sendAllInfo(plugin, cmd.getSource());
+                        return sendAllInfo(plugin, source);
                     }
                     plugin.proxy().getServer(server).ifPresentOrElse(sv ->
                             sv.ping().handleAsync((ping, exception) -> exception != null
                                 ? Placeholders.getOfflineServerComponent(plugin.config().getSingle().getOffline(), sv)
                                 : Placeholders.getServerComponent(plugin.config().getSingle().getOnline(), sv, ping))
-                            .thenAcceptAsync(cmd.getSource()::sendMessage),
-                            () -> cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize(plugin.config().getServerNotFound())));
+                            .thenAcceptAsync(source::sendMessage),
+                            () -> source.sendMessage(MiniMessage.miniMessage().deserialize(plugin.config().getServerNotFound())));
                     return Command.SINGLE_SUCCESS;
                 })
             ).build();
@@ -64,7 +65,7 @@ public class ServerInfoCommand {
         CompletableFuture.allOf(registeredServers.parallelStream()
             .map(server -> server.ping().handleAsync((ping, ex) -> servers.put(server, ping)))
             .toArray(CompletableFuture[]::new))
-            .thenRunAsync(() -> {
+            .thenApplyAsync((ignored) -> {
                 final TextComponent.Builder onlineServers = Component.text();
                 final TextComponent.Builder offlineServers = Component.text();
                 final AtomicBoolean hasOffline = new AtomicBoolean(false);
@@ -92,13 +93,9 @@ public class ServerInfoCommand {
                             MiniMessage.miniMessage().deserialize(
                                     plugin.config().getAll().getOffline().getNoneFound()));
                 }
-                source.sendMessage(
-                    Placeholders.getInfoComponent(
-                        plugin.config(),
-                        onlineServers.build(),
-                        offlineServers.build()
-                    ));
-            });
+
+                return Placeholders.getInfoComponent(plugin.config(), onlineServers.build(), offlineServers.build());
+            }).thenAcceptAsync(source::sendMessage);
             return Command.SINGLE_SUCCESS;
     }
 

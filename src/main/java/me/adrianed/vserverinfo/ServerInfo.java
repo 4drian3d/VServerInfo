@@ -21,7 +21,7 @@ import me.adrianed.vserverinfo.utils.Constants;
     id = "vserverinfo",
     name = "vServerInfo",
     version = Constants.VERSION,
-    description = "Get Info about your servers",
+    description = "Get Information about your servers",
     authors = ("4drian3d")
 )
 public final class ServerInfo {
@@ -39,7 +39,7 @@ public final class ServerInfo {
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        Libraries.load(this, logger, path, proxy().getPluginManager());
+        Libraries.load(this, logger, path, proxy.getPluginManager());
         this.configuration = Loader.loadConfig(path, logger);
         if (this.configuration == null) {
             return;

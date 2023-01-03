@@ -36,4 +36,6 @@ public final class Loader {
             return null;
         }
     }
+
+    private Loader() {}
 }
