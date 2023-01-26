@@ -1,31 +1,36 @@
 plugins {
     java
-    id("net.kyori.blossom") version "1.3.1"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("xyz.jpenilla.run-velocity") version "2.0.0"
+    alias(libs.plugins.blossom)
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.runvelocity)
 }
 
-val configurateVersion: String by project.extra
-val geantyrefVersion: String by project.extra
-
 repositories {
+    maven("https://papermc.io/repo/repository/maven-public/") {
+        mavenContent {
+            includeGroup(libs.velocity.get().group)
+        }
+    }
+    maven("https://jitpack.io") {
+        mavenContent {
+            includeGroup(libs.libby.get().group)
+        }
+    }
     mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://jitpack.io")
 }
 
 dependencies {
-    compileOnly("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
-    implementation("com.github.AlessioDP.libby:libby-velocity:43d25ade72")
-    compileOnly("org.spongepowered:configurate-hocon:$configurateVersion")
+    compileOnly(libs.velocity)
+    annotationProcessor(libs.velocity)
+    implementation(libs.libby)
+    compileOnly(libs.configurate)
 }
 
 blossom{
     replaceTokenIn("src/main/java/me/adrianed/vserverinfo/utils/Constants.java")
     replaceToken("{version}", version)
-    replaceToken("{configurate}", configurateVersion)
-    replaceToken("{geantyref}", geantyrefVersion)
+    replaceToken("{configurate}", libs.versions.configurate.get())
+    replaceToken("{geantyref}", libs.versions.geantyref.get())
 }
 
 tasks {
@@ -47,7 +52,7 @@ tasks {
     }
 
     runVelocity {
-        velocityVersion("3.2.0-SNAPSHOT")
+        velocityVersion(libs.versions.velocity.get())
     }
 }
 
