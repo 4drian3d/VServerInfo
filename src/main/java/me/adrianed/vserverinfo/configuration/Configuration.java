@@ -5,7 +5,6 @@ import java.util.List;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
-
 @SuppressWarnings("ALL")
 @ConfigSerializable
 public class Configuration {
