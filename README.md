@@ -2,7 +2,7 @@
 Get the information of each server in your Velocity network
 
 ## Requirements
-- Velocity 3.1.2+
+- Velocity 3.2.0 build 224+
 - Java 17+
 
 ## Commands
@@ -10,3 +10,7 @@ Get the information of each server in your Velocity network
 ### /vserverinfo
 This command will give you information about all the servers you have in your Velocity network.
 All messages are fully customizable from the configuration (config.conf)
+
+## Downloads
+
+Download it from [Modrinth](https://modrinth.com/plugin/vserverinfo)
