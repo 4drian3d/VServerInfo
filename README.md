@@ -8,8 +8,16 @@ Get the information of each server in your Velocity network
 ## Commands
 
 ### /vserverinfo
+
 This command will give you information about all the servers you have in your Velocity network.
 All messages are fully customizable from the configuration (config.conf)
+
+#### Permission
+`vserverinfo.command`
+
+#### Aliases
+`/serverinfo`
+
 
 ## Downloads
 

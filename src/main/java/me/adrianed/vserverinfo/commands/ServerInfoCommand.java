@@ -31,6 +31,7 @@ public final class ServerInfoCommand {
     public static void command(final ServerInfo plugin){
         final LiteralCommandNode<CommandSource> infoCommand = LiteralArgumentBuilder
             .<CommandSource>literal("serverinfo")
+            .requires(src -> src.hasPermission("vserverinfo.command"))
             .executes(context -> sendAllInfo(plugin, context.getSource()))
             .then(RequiredArgumentBuilder.<CommandSource, String>argument("server", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
