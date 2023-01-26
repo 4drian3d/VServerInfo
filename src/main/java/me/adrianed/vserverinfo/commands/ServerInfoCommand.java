@@ -13,8 +13,10 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
+import com.velocitypowered.api.proxy.server.PingOptions;
 
 import me.adrianed.vserverinfo.ServerInfo;
 import me.adrianed.vserverinfo.utils.Placeholders;
@@ -23,6 +25,9 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public final class ServerInfoCommand {
+    private static final PingOptions OPTIONS = PingOptions.builder()
+            .version(ProtocolVersion.MINECRAFT_1_16_4)
+            .build();
     public static void command(final ServerInfo plugin){
         final LiteralCommandNode<CommandSource> infoCommand = LiteralArgumentBuilder
             .<CommandSource>literal("serverinfo")
@@ -40,7 +45,7 @@ public final class ServerInfoCommand {
                         return sendAllInfo(plugin, source);
                     }
                     plugin.proxy().getServer(server).ifPresentOrElse(sv ->
-                            sv.ping().handleAsync((ping, exception) -> exception != null
+                            sv.ping(OPTIONS).handleAsync((ping, exception) -> exception != null
                                 ? Placeholders.getOfflineServerComponent(plugin.config().getSingle().getOffline(), sv)
                                 : Placeholders.getServerComponent(plugin.config().getSingle().getOnline(), sv, ping))
                             .thenAcceptAsync(source::sendMessage),
@@ -63,7 +68,7 @@ public final class ServerInfoCommand {
         final var registeredServers = plugin.proxy().getAllServers();
         final Map<RegisteredServer, ServerPing> servers = new HashMap<>(registeredServers.size());
         CompletableFuture.allOf(registeredServers.parallelStream()
-            .map(server -> server.ping().handleAsync((ping, ex) -> servers.put(server, ping)))
+            .map(server -> server.ping(OPTIONS).handleAsync((ping, ex) -> servers.put(server, ping)))
             .toArray(CompletableFuture[]::new))
             .thenApplyAsync((ignored) -> {
                 final TextComponent.Builder onlineServers = Component.text();
