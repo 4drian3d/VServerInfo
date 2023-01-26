@@ -22,3 +22,6 @@ All messages are fully customizable from the configuration (config.conf)
 ## Downloads
 
 Download it from [Modrinth](https://modrinth.com/plugin/vserverinfo)
+
+
+![Banner](https://i.imgur.com/yRJT77Q.png)
