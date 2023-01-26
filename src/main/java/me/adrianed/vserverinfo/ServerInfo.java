@@ -25,17 +25,14 @@ import me.adrianed.vserverinfo.utils.Constants;
     authors = ("4drian3d")
 )
 public final class ServerInfo {
-    private final ProxyServer proxy;
-    private final Logger logger;
-    private final Path path;
-    private Configuration configuration;
-
     @Inject
-    public ServerInfo(ProxyServer proxy, Logger logger, @DataDirectory Path path) {
-        this.proxy = proxy;
-        this.logger = logger;
-        this.path = path;
-    }
+    private ProxyServer proxy;
+    @Inject
+    private Logger logger;
+    @Inject
+    @DataDirectory
+    private Path path;
+    private Configuration configuration;
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
@@ -55,5 +52,4 @@ public final class ServerInfo {
     public ProxyServer proxy() {
         return this.proxy;
     }
-
 }
