@@ -62,8 +62,8 @@ public final class ServerInfoCommand {
                     }
                     proxyServer.getServer(server).ifPresentOrElse(sv ->
                             sv.ping(OPTIONS).handleAsync((ping, exception) -> ping == null
-                                ? placeholders.getOfflineServerComponent(configuration.getSingle().getOffline(), sv)
-                                : placeholders.getServerComponent(configuration.getSingle().getOnline(), sv, ping))
+                                ? placeholders.offlineComponent(configuration.getSingle().getOffline(), sv)
+                                : placeholders.onlineComponent(configuration.getSingle().getOnline(), sv, ping))
                             .thenAcceptAsync(source::sendMessage),
                             () -> source.sendMessage(miniMessage().deserialize(configuration.getServerNotFound())));
                     return Command.SINGLE_SUCCESS;
@@ -88,39 +88,31 @@ public final class ServerInfoCommand {
                 .thenApply(pairs -> {
                     final TextComponent.Builder onlineServers = Component.text();
                     final TextComponent.Builder offlineServers = Component.text();
-                    final AtomicBoolean hasOffline = new AtomicBoolean(false);
-                    final AtomicBoolean hasOnline = new AtomicBoolean(false);
+                    final AtomicBoolean hasOffline = new AtomicBoolean();
+                    final AtomicBoolean hasOnline = new AtomicBoolean();
+                    final Configuration.All allSection = configuration.getAll();
 
                     pairs.forEach((pair) -> {
                         if (pair.ping == null) {
                             hasOffline.set(true);
                             offlineServers.append(
-                                    placeholders.getOfflineServerComponent(
-                                            configuration.getAll().getOffline(),
-                                            pair.server)
+                                    placeholders.offlineComponent(allSection.getOffline(), pair.server)
                             );
                         } else {
                             hasOnline.set(true);
                             onlineServers.append(
-                                    placeholders.getServerComponent(
-                                            configuration.getAll().getOnline(),
-                                            pair.server,
-                                            pair.ping)
+                                    placeholders.onlineComponent(allSection.getOnline(), pair.server, pair.ping)
                             );
                         }
                     });
                     if (!hasOnline.get()) {
-                        onlineServers.append(
-                                miniMessage().deserialize(
-                                        configuration.getAll().getOnline().getNoneFound()));
+                        onlineServers.append(miniMessage().deserialize(allSection.getOnline().getNoneFound()));
                     }
                     if (!hasOffline.get()) {
-                        offlineServers.append(
-                                miniMessage().deserialize(
-                                        configuration.getAll().getOffline().getNoneFound()));
+                        offlineServers.append(miniMessage().deserialize(allSection.getOffline().getNoneFound()));
                     }
 
-                    return placeholders.getInfoComponent(onlineServers.build(), offlineServers.build());
+                    return placeholders.infoComponent(onlineServers.build(), offlineServers.build());
                 }).thenAccept(source::sendMessage);
 
             return Command.SINGLE_SUCCESS;

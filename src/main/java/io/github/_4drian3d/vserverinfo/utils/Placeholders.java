@@ -24,7 +24,7 @@ public final class Placeholders {
     @Inject
     private PluginManager pluginManager;
 
-    public Component getServerComponent(Configuration.OnlineFormat config, final RegisteredServer server, final ServerPing ping){
+    public Component onlineComponent(Configuration.OnlineFormat config, final RegisteredServer server, final ServerPing ping){
         final TagResolver.Builder builder = TagResolver.builder()
                 .resolvers(
                         Placeholder.unparsed("server", server.getServerInfo().getName()),
@@ -51,7 +51,7 @@ public final class Placeholders {
             .append(Component.space());
     }
 
-    public Component getOfflineServerComponent(Configuration.OfflineFormat config, final RegisteredServer server) {
+    public Component offlineComponent(Configuration.OfflineFormat config, final RegisteredServer server) {
         final TagResolver.Builder builder = TagResolver.builder()
                 .resolvers(
                         Placeholder.unparsed("server", server.getServerInfo().getName()),
@@ -73,7 +73,7 @@ public final class Placeholders {
                 ));
     }
 
-    public Component getInfoComponent(@NotNull Component online, @NotNull Component offline){
+    public Component infoComponent(@NotNull Component online, @NotNull Component offline){
         final TagResolver.Builder builder = TagResolver.builder().resolvers(
             Placeholder.component("onlineservers", online),
             Placeholder.component("offlineservers", offline)
