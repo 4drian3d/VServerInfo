@@ -1,6 +1,8 @@
 package me.adrianed.vserverinfo.utils;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.PluginManager;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import me.adrianed.vserverinfo.ServerInfo;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.VelocityLibraryManager;
@@ -10,9 +12,19 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class Libraries {
-    public static void load(ServerInfo plugin, Logger logger, Path path, PluginManager manager) {
+    @Inject
+    private ServerInfo plugin;
+    @Inject
+    private Logger logger;
+    @Inject
+    @DataDirectory
+    private Path path;
+    @Inject
+    private PluginManager pluginManager;
+
+    public void load() {
         final VelocityLibraryManager<ServerInfo> libraryManager
-                = new VelocityLibraryManager<>(logger, path, manager, plugin, "libs");
+                = new VelocityLibraryManager<>(logger, path, pluginManager, plugin, "libs");
         final Relocation configurateRelocation
                 = new Relocation("org{}spongepowered", "me.adrianed.vserverinfo.libs.sponge");
         final Relocation geantyrefRelocation =

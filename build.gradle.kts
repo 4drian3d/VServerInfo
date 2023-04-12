@@ -6,17 +6,12 @@ plugins {
 }
 
 repositories {
-    maven("https://papermc.io/repo/repository/maven-public/") {
-        mavenContent {
-            includeGroup(libs.velocity.get().group)
-        }
-    }
-    maven("https://jitpack.io") {
+    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.alessiodp.com/releases/") {
         mavenContent {
             includeGroup(libs.libby.get().group)
         }
     }
-    mavenCentral()
 }
 
 dependencies {
@@ -24,6 +19,7 @@ dependencies {
     annotationProcessor(libs.velocity)
     implementation(libs.libby)
     compileOnly(libs.configurate)
+    compileOnly(libs.miniplaceholders)
 }
 
 blossom{

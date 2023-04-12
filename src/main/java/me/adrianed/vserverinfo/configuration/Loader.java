@@ -1,5 +1,7 @@
 package me.adrianed.vserverinfo.configuration;
 
+import com.google.inject.Inject;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
@@ -8,7 +10,13 @@ import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import java.nio.file.Path;
 
 public final class Loader {
-    public static Configuration loadConfig(Path path, Logger logger)  {
+    @Inject
+    @DataDirectory
+    private Path path;
+    @Inject
+    private Logger logger;
+
+    public Configuration loadConfig()  {
         final HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
                 .defaultOptions(opts -> opts
                         .shouldCopyDefaults(true)
@@ -36,6 +44,4 @@ public final class Loader {
             return null;
         }
     }
-
-    private Loader() {}
 }

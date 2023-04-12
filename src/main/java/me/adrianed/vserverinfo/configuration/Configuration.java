@@ -53,7 +53,7 @@ public class Configuration {
         }
 
         @ConfigSerializable
-        public static class Online implements OnlineFormat {
+        public static final class Online implements OnlineFormat {
             @Comment("Sets the text formatting of each online server")
             private String format = "<gradient:#4ecdc4:#55670><server></gradient>";
             @Comment("Set the hover with the information to be displayed for each online server")
@@ -82,7 +82,7 @@ public class Configuration {
         }
 
         @ConfigSerializable
-        public static class Offline implements OfflineFormat {
+        public static final class Offline implements OfflineFormat {
             @Comment("Sets the text formatting of each offline server")
             private String format = "<gradient:#ee0979:#ff6a00><server></gradient>";
             @Comment("Set the hover with the information to be displayed for each offline server")
@@ -121,7 +121,7 @@ public class Configuration {
         }
 
         @ConfigSerializable
-        public static class Online implements OnlineFormat {
+        public static final class Online implements OnlineFormat {
             @Comment("Format to use in case the server is Online")
             private String format = "<gray>Online Server: <gradient:#4ecdc4:#55670><server></gradient>";
             @Comment("Hover to apply to show server information online")
@@ -144,7 +144,7 @@ public class Configuration {
         }
 
         @ConfigSerializable
-        public static class Offline implements OfflineFormat {
+        public static final class Offline implements OfflineFormat {
             @Comment("Format to use in case the server is Offline")
             private String format = "<dark_gray>Offline Server: <gradient:#ee0979:#ff6a00><server></gradient>";
             private List<String> hover = List.of("");
@@ -167,6 +167,6 @@ public class Configuration {
         List<String> getHover();
     }
 
-    public static non-sealed interface OnlineFormat extends FormatConfig {}
-    public static non-sealed interface OfflineFormat extends FormatConfig {}
+    public static sealed interface OnlineFormat extends FormatConfig permits Single.Online, All.Online {}
+    public static sealed interface OfflineFormat extends FormatConfig permits Single.Offline, All.Offline {}
 }
