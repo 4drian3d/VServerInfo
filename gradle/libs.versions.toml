@@ -6,7 +6,6 @@ metadata.format.version = "1.1"
 velocity = "3.2.0-SNAPSHOT"
 libby = "1.2.0"
 configurate = "4.1.2"
-miniplaceholders = "1.3.1"
 
 # Plugins
 blossom = "1.3.1"
@@ -15,6 +14,9 @@ runvelocity = "2.0.1"
 
 # Required by Configurate 4
 geantyref = "1.3.13"
+
+velocityhexlogger = "1.0.2"
+miniplaceholders = "2.0.0"
 
 [libraries]
 
@@ -25,7 +27,10 @@ configurate = { module = "org.spongepowered:configurate-hocon", version.ref = "c
 # Included Dependencies
 libby = { group = "net.byteflux", name = "libby-velocity", version.ref = "libby" }
 
-miniplaceholders = { group = "io.github.miniplaceholders", name = "miniplaceholders-api", version = "2.0.0" }
+miniplaceholders = { group = "io.github.miniplaceholders", name = "miniplaceholders-api", version.ref = "miniplaceholders" }
+velocityhexlogger = { group = "io.github.4drian3d", name = "velocityhexlogger", version.ref = "velocityhexlogger" }
+
+completables = { group = "com.spotify", name = "completable-futures", version = "0.3.1" }
 
 [plugins]
 

@@ -1,9 +1,9 @@
-package me.adrianed.vserverinfo.utils;
+package io.github._4drian3d.vserverinfo.utils;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
-import me.adrianed.vserverinfo.ServerInfo;
+import io.github._4drian3d.vserverinfo.ServerInfo;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.VelocityLibraryManager;
 import net.byteflux.libby.relocation.Relocation;
@@ -26,9 +26,9 @@ public final class Libraries {
         final VelocityLibraryManager<ServerInfo> libraryManager
                 = new VelocityLibraryManager<>(logger, path, pluginManager, plugin, "libs");
         final Relocation configurateRelocation
-                = new Relocation("org{}spongepowered", "me.adrianed.vserverinfo.libs.sponge");
+                = new Relocation("org{}spongepowered", "io.github._4drian3d.vserverinfo.libs.sponge");
         final Relocation geantyrefRelocation =
-                new Relocation("io{}leangen{}geantyref", "me.adrianed.vserverinfo.libs.geantyref");
+                new Relocation("io{}leangen{}geantyref", "io.github._4drian3d.vserverinfo.libs.geantyref");
         final Library hocon = Library.builder()
                 .groupId("org{}spongepowered")
                 .artifactId("configurate-hocon")

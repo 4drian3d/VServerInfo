@@ -1,4 +1,4 @@
-package me.adrianed.vserverinfo.configuration;
+package io.github._4drian3d.vserverinfo.configuration;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;

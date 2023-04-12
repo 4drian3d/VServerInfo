@@ -1,20 +1,18 @@
-package me.adrianed.vserverinfo.utils;
-
-import java.util.stream.Collector;
+package io.github._4drian3d.vserverinfo.utils;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
-
+import io.github._4drian3d.vserverinfo.configuration.Configuration;
 import io.github.miniplaceholders.api.MiniPlaceholders;
-import me.adrianed.vserverinfo.configuration.Configuration;
-import org.jetbrains.annotations.NotNull;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.stream.Collector;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -57,7 +55,6 @@ public final class Placeholders {
         final TagResolver.Builder builder = TagResolver.builder()
                 .resolvers(
                         Placeholder.unparsed("server", server.getServerInfo().getName()),
-                        Placeholder.unparsed("count", String.valueOf(server.getPlayersConnected().size())),
                         Placeholder.unparsed("ip", String.valueOf(server.getServerInfo().getAddress().getAddress().getHostAddress()))
                 );
         if (pluginManager.isLoaded("miniplaceholders")) {

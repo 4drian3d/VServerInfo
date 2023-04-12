@@ -1,4 +1,4 @@
-package me.adrianed.vserverinfo;
+package io.github._4drian3d.vserverinfo;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -6,12 +6,14 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
-import me.adrianed.vserverinfo.commands.ServerInfoCommand;
-import me.adrianed.vserverinfo.configuration.Configuration;
-import me.adrianed.vserverinfo.configuration.Loader;
-import me.adrianed.vserverinfo.utils.Constants;
-import me.adrianed.vserverinfo.utils.Libraries;
-import org.slf4j.Logger;
+import io.github._4drian3d.velocityhexlogger.HexLogger;
+import io.github._4drian3d.vserverinfo.commands.ServerInfoCommand;
+import io.github._4drian3d.vserverinfo.configuration.Configuration;
+import io.github._4drian3d.vserverinfo.configuration.Loader;
+import io.github._4drian3d.vserverinfo.utils.Constants;
+import io.github._4drian3d.vserverinfo.utils.Libraries;
+
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 @Plugin(
     id = "vserverinfo",
@@ -19,11 +21,11 @@ import org.slf4j.Logger;
     version = Constants.VERSION,
     description = "Get Information about your servers",
     authors = ("4drian3d"),
-    dependencies = { @Dependency(id = "miniplaceholders", optional = true)}
+    dependencies = { @Dependency(id = "miniplaceholders", optional = true) }
 )
 public final class ServerInfo {
     @Inject
-    private Logger logger;
+    private HexLogger logger;
     @Inject
     private Injector injector;
 
@@ -42,6 +44,7 @@ public final class ServerInfo {
         );
 
         injector.getInstance(ServerInfoCommand.class).register();
-        logger.info("ServerInfo correctly started");
+        logger.info(miniMessage().deserialize(
+                "<gradient:#E8C547:#F59916>VServerInfo</gradient> by <aqua>4drian3d <white>has correctly started"));
     }
 }

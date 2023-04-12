@@ -1,4 +1,4 @@
-package me.adrianed.vserverinfo.utils;
+package io.github._4drian3d.vserverinfo.utils;
 
 public final class Constants {
     public static final String VERSION = "{version}";
