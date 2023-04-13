@@ -30,7 +30,7 @@ libby = { group = "net.byteflux", name = "libby-velocity", version.ref = "libby"
 miniplaceholders = { group = "io.github.miniplaceholders", name = "miniplaceholders-api", version.ref = "miniplaceholders" }
 velocityhexlogger = { group = "io.github.4drian3d", name = "velocityhexlogger", version.ref = "velocityhexlogger" }
 
-completables = { group = "com.spotify", name = "completable-futures", version = "0.3.1" }
+completables = { group = "com.spotify", name = "completable-futures", version = "0.3.5" }
 
 [plugins]
 
