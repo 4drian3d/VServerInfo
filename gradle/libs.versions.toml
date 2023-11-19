@@ -16,7 +16,7 @@ runvelocity = "2.2.0"
 geantyref = "1.3.13"
 
 velocityhexlogger = "1.0.2"
-miniplaceholders = "2.2.2"
+miniplaceholders = "2.2.3"
 
 [libraries]
 
