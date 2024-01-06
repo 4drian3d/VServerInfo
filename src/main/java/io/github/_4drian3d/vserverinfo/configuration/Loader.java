@@ -32,10 +32,9 @@ public final class Loader {
                 .path(path.resolve("config.conf"))
                 .build();
 
-        final Configuration config;
         try {
             final CommentedConfigurationNode node = loader.load();
-            config = node.get(Configuration.class);
+            final Configuration config = node.get(Configuration.class);
             node.set(Configuration.class, config);
             loader.save(node);
             return config;
