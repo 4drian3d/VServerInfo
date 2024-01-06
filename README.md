@@ -2,7 +2,7 @@
 Get the information of each server in your Velocity network
 
 ## Requirements
-- Velocity 3.2.0 build 224+
+- Velocity 3.3.0+
 - Java 17+
 
 ## Commands

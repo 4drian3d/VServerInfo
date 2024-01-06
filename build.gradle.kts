@@ -1,5 +1,6 @@
 plugins {
     java
+    alias(libs.plugins.idea.ext)
     alias(libs.plugins.blossom)
     alias(libs.plugins.shadow)
     alias(libs.plugins.runvelocity)
@@ -7,28 +8,24 @@ plugins {
 
 repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://repo.alessiodp.com/releases/") {
-        mavenContent {
-            includeGroup(libs.libby.get().group)
-        }
-    }
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
-    implementation(libs.libby)
-    implementation(libs.velocityhexlogger)
-    compileOnly(libs.configurate)
     compileOnly(libs.miniplaceholders)
     compileOnly(libs.completables)
 }
 
-blossom{
-    replaceTokenIn("src/main/java/io/github/_4drian3d/vserverinfo/utils/Constants.java")
-    replaceToken("{version}", version)
-    replaceToken("{configurate}", libs.versions.configurate.get())
-    replaceToken("{geantyref}", libs.versions.geantyref.get())
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("version", project.version.toString())
+            }
+        }
+    }
 }
 
 tasks {
@@ -46,15 +43,13 @@ tasks {
     shadowJar {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
-        relocate("org.spongepowered", "io.github._4drian3d.vserverinfo.libs.sponge")
-        relocate("net.byteflux", "io.github._4drian3d.libs.byteflux")
-        relocate("io.leangen.geantyref", "io.github._4drian3d.libs.geantyref")
-        relocate("io.github._4drian3d.velocityhexlogger", "io.github._4drian3d.vserverinfo.velocityhexlogger")
-        relocate("net.kyori.adventure.text.logger.slf4j", "io.github._4drian3d.vserverinfo.component.logger")
     }
 
     runVelocity {
         velocityVersion(libs.versions.velocity.get())
+        downloadPlugins {
+            url("https://cdn.modrinth.com/data/HQyibRsN/versions/pxgKwgNJ/MiniPlaceholders-Velocity-2.2.3.jar")
+        }
     }
 }
 

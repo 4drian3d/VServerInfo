@@ -6,12 +6,11 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
-import io.github._4drian3d.velocityhexlogger.HexLogger;
 import io.github._4drian3d.vserverinfo.commands.ServerInfoCommand;
 import io.github._4drian3d.vserverinfo.configuration.Configuration;
 import io.github._4drian3d.vserverinfo.configuration.Loader;
 import io.github._4drian3d.vserverinfo.utils.Constants;
-import io.github._4drian3d.vserverinfo.utils.Libraries;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -25,14 +24,12 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 )
 public final class ServerInfo {
     @Inject
-    private HexLogger logger;
+    private ComponentLogger logger;
     @Inject
     private Injector injector;
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        injector.getInstance(Libraries.class).load();
-
         final Configuration configuration = injector.getInstance(Loader.class)
                 .loadConfig();
         if (configuration == null) {
