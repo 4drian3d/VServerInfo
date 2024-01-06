@@ -3,8 +3,6 @@ package io.github._4drian3d.vserverinfo.commands;
 import com.google.inject.Inject;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.spotify.futures.CompletableFutures;
 import com.velocitypowered.api.command.BrigadierCommand;
@@ -23,7 +21,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -44,11 +41,11 @@ public final class ServerInfoCommand {
     private Configuration configuration;
 
     public void register() {
-        final LiteralCommandNode<CommandSource> infoCommand = LiteralArgumentBuilder
-            .<CommandSource>literal("serverinfo")
+        final LiteralCommandNode<CommandSource> infoCommand = BrigadierCommand
+            .literalArgumentBuilder("serverinfo")
             .requires(src -> src.hasPermission("vserverinfo.command"))
             .executes(context -> sendAllInfo(context.getSource()))
-            .then(RequiredArgumentBuilder.<CommandSource, String>argument("server", StringArgumentType.word())
+            .then(BrigadierCommand.requiredArgumentBuilder("server", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
                     proxyServer.getAllServers().forEach(sv -> builder.suggest(sv.getServerInfo().getName()));
                     builder.suggest("ALL");
@@ -88,27 +85,27 @@ public final class ServerInfoCommand {
                 .thenApply(pairs -> {
                     final TextComponent.Builder onlineServers = Component.text();
                     final TextComponent.Builder offlineServers = Component.text();
-                    final AtomicBoolean hasOffline = new AtomicBoolean();
-                    final AtomicBoolean hasOnline = new AtomicBoolean();
+                    boolean hasOffline = false;
+                    boolean hasOnline = false;
                     final Configuration.All allSection = configuration.getAll();
 
-                    pairs.forEach((pair) -> {
+                    for (final Pair pair : pairs) {
                         if (pair.ping == null) {
-                            hasOffline.set(true);
+                            hasOffline = true;
                             offlineServers.append(
                                     placeholders.offlineComponent(allSection.getOffline(), pair.server)
                             );
                         } else {
-                            hasOnline.set(true);
+                            hasOnline = true;
                             onlineServers.append(
                                     placeholders.onlineComponent(allSection.getOnline(), pair.server, pair.ping)
                             );
                         }
-                    });
-                    if (!hasOnline.get()) {
+                    }
+                    if (!hasOnline) {
                         onlineServers.append(miniMessage().deserialize(allSection.getOnline().getNoneFound()));
                     }
-                    if (!hasOffline.get()) {
+                    if (!hasOffline) {
                         offlineServers.append(miniMessage().deserialize(allSection.getOffline().getNoneFound()));
                     }
 
