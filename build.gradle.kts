@@ -2,13 +2,11 @@ plugins {
     java
     alias(libs.plugins.idea.ext)
     alias(libs.plugins.blossom)
-    alias(libs.plugins.shadow)
     alias(libs.plugins.runvelocity)
 }
 
 repositories {
-    maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
@@ -29,20 +27,12 @@ sourceSets {
 }
 
 tasks {
-    build {
-        dependsOn(shadowJar)
-    }
 
     compileJava {
         options.apply {
-            release.set(17)
+            release.set(21)
             encoding = Charsets.UTF_8.name()
         }
-    }
-
-    shadowJar {
-        archiveBaseName.set(rootProject.name)
-        archiveClassifier.set("")
     }
 
     runVelocity {
@@ -53,4 +43,4 @@ tasks {
     }
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))

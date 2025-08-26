@@ -3,14 +3,13 @@ metadata.format.version = "1.1"
 [versions]
 
 # Compile only
-velocity = "3.3.0-SNAPSHOT"
+velocity = "3.4.0-SNAPSHOT"
 
 # Plugins
 blossom = "2.1.0"
-shadow = "8.1.1"
 runvelocity = "2.3.1"
 
-miniplaceholders = "2.2.3"
+miniplaceholders = "3.0.1"
 
 [libraries]
 
@@ -24,6 +23,5 @@ completables = { group = "com.spotify", name = "completable-futures", version = 
 [plugins]
 
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runvelocity" }
-idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.1.9" }
+idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.3" }

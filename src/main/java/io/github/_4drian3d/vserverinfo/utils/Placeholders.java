@@ -35,7 +35,7 @@ public final class Placeholders {
                 );
 
         if (pluginManager.isLoaded("miniplaceholders")) {
-            builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
+            builder.resolver(MiniPlaceholders.globalPlaceholders());
         }
 
         final TagResolver resolver = builder.build();
@@ -58,7 +58,7 @@ public final class Placeholders {
                         Placeholder.unparsed("ip", String.valueOf(server.getServerInfo().getAddress().getAddress().getHostAddress()))
                 );
         if (pluginManager.isLoaded("miniplaceholders")) {
-            builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
+            builder.resolver(MiniPlaceholders.globalPlaceholders());
         }
         final TagResolver resolver = builder.build();
 
@@ -80,7 +80,7 @@ public final class Placeholders {
         );
 
         if (pluginManager.isLoaded("miniplaceholders")) {
-            builder.resolver(MiniPlaceholders.getGlobalPlaceholders());
+            builder.resolver(MiniPlaceholders.globalPlaceholders());
         }
         final TagResolver resolver = builder.build();
 
