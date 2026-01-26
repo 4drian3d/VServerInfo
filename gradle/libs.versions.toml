@@ -24,4 +24,4 @@ completables = { group = "com.spotify", name = "completable-futures", version = 
 
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runvelocity" }
-idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.3" }
+idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.4" }
