@@ -30,7 +30,7 @@ tasks {
 
     compileJava {
         options.apply {
-            release.set(21)
+            release.set(25)
             encoding = Charsets.UTF_8.name()
         }
     }
@@ -43,4 +43,4 @@ tasks {
     }
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(25))
